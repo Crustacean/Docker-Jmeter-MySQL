@@ -64,7 +64,7 @@ From _phpmyadmin_ create a database called _jmeter_ and a table called _loadTest
 In the table, access the SQL table and run the following command to create the columns that a jmeter would result in
 
 ```bash
-create table loadTest (timeStamp varchar(255),elapsed varchar(255),label varchar(255),responseCode varchar(255),responseMessage varchar(255),threadName varchar(255),dataType varchar(255),success varchar(255),failureMessage varchar(255),bytes varchar(255),sentBytes varchar(255),grpThreads varchar(255),allThreads varchar(255),URL varchar(255),Latency varchar(255),IdleTime varchar(255),Connect varchar(255) );
+create table loadTest (timestamp varchar(255),elapsed varchar(255),label varchar(255),responseCode varchar(255),responseMessage varchar(255),threadName varchar(255),dataType varchar(255),success varchar(255),failureMessage varchar(255),bytes varchar(255),sentBytes varchar(255),grpThreads varchar(255),allThreads varchar(255),URL varchar(255),Latency varchar(255),IdleTime varchar(255),Connect varchar(255) );
 
 ```
 
@@ -84,8 +84,9 @@ create database jmeter;
 use jmeter;
 
 <!--Create a table called loadTest in jmeter db with all columns needed-->
-create table loadTest (timeStamp varchar(255),elapsed varchar(255),label varchar(255),responseCode varchar(255),responseMessage varchar(255),threadName varchar(255),dataType varchar(255),success varchar(255),failureMessage varchar(255),bytes varchar(255),sentBytes varchar(255),grpThreads varchar(255),allThreads varchar(255),URL varchar(255),Latency varchar(255),IdleTime varchar(255),Connect varchar(255) );
+create table loadTest (timestamp varchar(255),elapsed varchar(255),label varchar(255),responseCode varchar(255),responseMessage varchar(255),threadName varchar(255),dataType varchar(255),success varchar(255),failureMessage varchar(255),bytes varchar(255),sentBytes varchar(255),grpThreads varchar(255),allThreads varchar(255),URL varchar(255),Latency varchar(255),IdleTime varchar(255),Connect varchar(255) );
 
+```
 
 We have now created a mysql container, phpmyadmin and we have our mysql connector to knit everything together.
 
@@ -109,6 +110,27 @@ docker exec -i jmeter-mysql sh -c 'cat > /tmp/jmeter.csv' < ./jmeter.csv
 
 ```
 
+In order to copy a file from a container to the host, you can use the command
+
+docker cp <containerId>:/file/path/within/container /host/path/target
+
+Here's an example:
+
+```
+
+docker cp jmeter-mysql:/tmp/jmeter.csv .
+
+```
+
+You can also use the (part of) the Container ID. The following command is also relevant
+
+
+```
+
+docker cp 359656:/tmp/jmeter.csv .
+
+```
+
 ### Push csv file to the _jmeter_ database in MySQL
 
 Navigate to the _mysql-connector_ directory and run the following command:
@@ -123,7 +145,7 @@ This will run and push all rows in the csv file to the db.
 
 Alternatively, this could be done from the mysql container. 
 
-```bash
+```
 <!--To access the db-->
 docker exec -it jmeter-mysql mysql -uroot -padmin -h<yourMysqlContainerIPAddress> -P3306
 
@@ -138,10 +160,35 @@ use jmeter;
 
 <!--Go into jmeter db to use it-->
 SHOW GLOBAL VARIABLES LIKE 'local_infile';
+
+If you get:
+
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| local_infile  | OFF   |
++---------------+-------+
+
+Then set it to ON by typing:
+
 SET GLOBAL local_infile = true;
 SHOW VARIABLES LIKE '%connection%';
 SET GLOBAL max_connections = 50000;
+
+SHOW VARIABLES LIKE "secure_file_priv";
+
+if you get:
+
++------------------+-------+
+| Variable_name    | Value |
++------------------+-------+
+| secure_file_priv | NULL  |
++------------------+-------+
+
+Then set it to EMPTY by typing the below, or setting your own path:
+
 SET GLOBAL secure-file-priv = "";
+
 LOAD DATA LOCAL INFILE "./tmp/jmeter.csv" INTO TABLE loadTest COLUMNS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
 ```
