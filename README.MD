@@ -84,9 +84,46 @@ create database jmeter;
 use jmeter;
 
 <!--Create a table called loadTest in jmeter db with all columns needed-->
-create table loadTest (timestamp varchar(255),elapsed varchar(255),label varchar(255),responseCode varchar(255),responseMessage varchar(255),threadName varchar(255),dataType varchar(255),success varchar(255),failureMessage varchar(255),bytes varchar(255),sentBytes varchar(255),grpThreads varchar(255),allThreads varchar(255),URL varchar(255),Latency varchar(255),IdleTime varchar(255),Connect varchar(255) );
+create table loadTest (timestamp bigint,elapsed varchar(255),label varchar(255),responseCode varchar(255),responseMessage varchar(255),threadName varchar(255),dataType varchar(255),success varchar(255),failureMessage varchar(255),bytes varchar(255),sentBytes varchar(255),grpThreads varchar(255),allThreads varchar(255),URL varchar(255),Latency varchar(255),IdleTime varchar(255),Connect varchar(255) );
+
+<!--Show tables in jmeter database-->
+show tables;
+
++------------------+
+| Tables_in_jmeter |
++------------------+
+| loadTest         |
++------------------+
+
+<!--Show columns in loadTest table-->
+describe loadTest;
+
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| timestamp       | bigint       | YES  |     | NULL    |       |
+| elapsed         | varchar(255) | YES  |     | NULL    |       |
+| label           | varchar(255) | YES  |     | NULL    |       |
+| responseCode    | varchar(255) | YES  |     | NULL    |       |
+| responseMessage | varchar(255) | YES  |     | NULL    |       |
+| threadName      | varchar(255) | YES  |     | NULL    |       |
+| dataType        | varchar(255) | YES  |     | NULL    |       |
+| success         | varchar(255) | YES  |     | NULL    |       |
+| failureMessage  | varchar(255) | YES  |     | NULL    |       |
+| bytes           | varchar(255) | YES  |     | NULL    |       |
+| sentBytes       | varchar(255) | YES  |     | NULL    |       |
+| grpThreads      | varchar(255) | YES  |     | NULL    |       |
+| allThreads      | varchar(255) | YES  |     | NULL    |       |
+| URL             | varchar(255) | YES  |     | NULL    |       |
+| Latency         | varchar(255) | YES  |     | NULL    |       |
+| IdleTime        | varchar(255) | YES  |     | NULL    |       |
+| Connect         | varchar(255) | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+
 
 ```
+
+We have created a table named "loadTest" in "jmeter" database, with 17 columns, matching the headers in the CVS file.
 
 We have now created a mysql container, phpmyadmin and we have our mysql connector to knit everything together.
 
