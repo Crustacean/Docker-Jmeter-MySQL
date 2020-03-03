@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class ConnectMySQL {
    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-   static final String DB_URL = "jdbc:mysql://172.19.0.7:3306/jmeter";
+   static final String DB_URL = "jdbc:mysql://yourMysqlContainerIPAddress:3306/jmeter";
 
    static final String USER = "root";
    static final String PASS = "admin";

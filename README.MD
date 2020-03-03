@@ -48,6 +48,8 @@ A container running in its own network will have a randon IP address assigned to
 docker inspect jmeter-mysql | grep IPAdress
 ```
 
+This will be ***yourMysqlContainerIPAddress***
+
 In your server, run the following command to install _phpmyadmin_ .
 This is a tool that will provide a UI to access the db from the browser.
 
